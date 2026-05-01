@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio | Daulet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            box-shadow: 0 0 20px rgba(58, 123, 213, 0.5);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .info-list {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.03);
+            margin: 10px 0;
+            padding: 12px 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .info-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .info-item i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+            color: #00d2ff;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #ccc;
+            margin-right: 5px;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .tg { background: #0088cc; }
+        .vk { background: #4c75a3; }
+
+        .btn:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="avatar">
+        <i class="fas fa-user-ninja"></i>
+    </div>
+    
+    <h1>📝 Дᴏбᴩᴀ ᴨᴏжᴀᴧᴏʙᴀᴛь нᴀ биᴏ Дᴀуᴧᴇᴛа ✅</h1>
+
+    <div class="info-list">
+        <div class="info-item">
+            <i class="fas fa-id-card"></i>
+            <span class="label">𝙉𝙖𝙢𝙚:</span> Dᴀulᴇᴛ 👤
+        </div>
+        <div class="info-item">
+            <i class="fas fa-users"></i>
+            <span class="label">𝐅𝐫𝐢𝐞𝐧𝐝𝐬:</span> (ᴄᴋᴩыᴛᴏ) 😅
+        </div>
+        <div class="info-item">
+            <i class="fas fa-at"></i>
+            <span class="label">ᴀᴄᴄᴀᴏunᴛ:</span> @dauletbr, @HETY_HOMEP
+        </div>
+        <div class="info-item">
+            <i class="fas fa-code-branch"></i>
+            <span class="label">𝙈𝙮 𝙥𝙧𝙤𝙟𝙚𝙘𝙩:</span> soon 🏹
+        </div>
+        <div class="info-item">
+            <i class="fas fa-microphone"></i>
+            <span class="label">My Sᴛudiᴏ:</span> Soon 🎙
+        </div>
+        <div class="info-item">
+            <i class="fas fa-globe-asia"></i>
+            <span class="label">Cᴏunᴛry:</span> Kᴀzᴀᴋhsᴛᴀn 🇰🇿
+        </div>
+        <div class="info-item">
+            <i class="fas fa-dna"></i>
+            <span class="label">Хᴏбби:</span> иɜучᴀᴛь #ᴩᴀwn 🧬
+        </div>
+    </div>
+
+    <div class="links">
+        <a href="https://t.me/HETY_HOMEP" class="btn tg" target="_blank">
+            <i class="fab fa-telegram-plane"></i> Telegram
+        </a>
+        <a href="https://vk.ru/dauletchik" class="btn vk" target="_blank">
+            <i class="fab fa-vk"></i> ВКонтакте
+        </a>
+    </div>
+
+    <div class="footer">
+        © 2026 Daulet | Powered by GitHub
+    </div>
+</div>
+
+</body>
+</html>
+
