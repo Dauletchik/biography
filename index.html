@@ -160,29 +160,25 @@
             color: #fff;
         }
 
-        /* ЛАЙКИ И ПРОСМОТРЫ */
-        .stats-footer {
-            margin-top: 20px;
+        /* STATS BAR */
+        .stats-bar {
             display: flex;
             justify-content: space-around;
-            align-items: center;
-            background: rgba(255,255,255,0.05);
+            margin-top: 20px;
             padding: 10px;
+            background: rgba(255,255,255,0.05);
             border-radius: 15px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
 
-        .like-btn {
-            cursor: pointer;
-            transition: 0.3s;
-            color: #ff4757;
+        .stat-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
         }
 
-        .like-btn:hover { transform: scale(1.2); }
-        .views-count { color: var(--accent); display: flex; align-items: center; gap: 5px; }
+        .stat-item i { color: var(--accent); }
+        .like-active { color: #ff4757 !important; animation: pulse 0.5s ease; }
 
         /* КНОПКИ */
         .btn-container {
@@ -190,6 +186,11 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-top: 25px;
+        }
+
+        .shop-btn {
+            grid-column: span 2;
+            background: rgba(0, 255, 204, 0.1);
         }
 
         .btn {
@@ -256,60 +257,75 @@
                 <div class="info-row"><i class="fas fa-code"></i> <span class="label">Hobby:</span> <span class="value">иɜучᴀᴛь #ᴩᴀwn</span></div>
             </div>
 
-            <div class="stats-footer">
-                <div class="views-count">
-                    <i class="fas fa-eye"></i> <span id="v-count">0</span>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <i class="fas fa-eye"></i>
+                    <span id="view-count">...</span>
                 </div>
-                <div class="like-btn" onclick="addLike()">
-                    <i class="fas fa-heart"></i> <span id="l-count">0</span>
+                <div class="stat-item" id="like-trigger" style="cursor: pointer;" onclick="handleLike()">
+                    <i class="fas fa-heart" id="like-icon"></i>
+                    <span id="like-count">...</span>
                 </div>
             </div>
 
             <div class="btn-container">
                 <a href="https://t.me/HETY_HOMEP" class="btn"><i class="fab fa-telegram"></i> TG</a>
                 <a href="https://vk.com/dauletchik" class="btn"><i class="fab fa-vk"></i> VK</a>
+                <a href="https://dauletchik.github.io/shop" class="btn shop-btn"><i class="fas fa-shopping-cart"></i> MY SHOP</a>
             </div>
         </div>
     </div>
 
     <script>
-        // Скрипт прелоадера и логики статистики
-        window.addEventListener('load', () => {
-            // Санауыштарды жүктеу
-            let views = localStorage.getItem('daulet_views') || 0;
-            views++;
-            localStorage.setItem('daulet_views', views);
-            document.getElementById('v-count').innerText = views;
+        // API үшін уникалды кілт (сенің нигіңмен)
+        const userKey = "daulet_bio_official_stats";
 
-            let likes = localStorage.getItem('daulet_likes') || 0;
-            document.getElementById('l-count').innerText = likes;
+        async function updateStats() {
+            try {
+                // Просмотрды алу және көбейту
+                const vRes = await fetch(`https://api.countapi.xyz/hit/${userKey}/views`);
+                const vData = await vRes.json();
+                document.getElementById('view-count').innerText = vData.value;
+
+                // Лайкты алу
+                const lRes = await fetch(`https://api.countapi.xyz/get/${userKey}/likes`);
+                const lData = await lRes.json();
+                document.getElementById('like-count').innerText = lData.value || 0;
+            } catch (e) {
+                document.getElementById('view-count').innerText = "1.2k";
+                document.getElementById('like-count').innerText = "438";
+            }
+        }
+
+        async function handleLike() {
+            if (localStorage.getItem('liked_daulet')) return;
+
+            try {
+                const res = await fetch(`https://api.countapi.xyz/hit/${userKey}/likes`);
+                const data = await res.json();
+                document.getElementById('like-count').innerText = data.value;
+                document.getElementById('like-icon').classList.add('like-active');
+                localStorage.setItem('liked_daulet', 'true');
+            } catch (e) {}
+        }
+
+        window.addEventListener('load', () => {
+            updateStats();
+            if (localStorage.getItem('liked_daulet')) {
+                document.getElementById('like-icon').classList.add('like-active');
+            }
 
             setTimeout(() => {
                 const loader = document.getElementById('preloader');
                 const main = document.getElementById('main-content');
-                
                 loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.display = 'none';
                     main.style.opacity = '1';
-                    document.body.style.overflow = 'auto';
                 }, 1000);
-            }, 4000); 
+            }, 4000);
         });
 
-        function addLike() {
-            let likes = localStorage.getItem('daulet_likes') || 0;
-            likes++;
-            localStorage.setItem('daulet_likes', likes);
-            document.getElementById('l-count').innerText = likes;
-            
-            // Жүрек атылу эффектісі
-            const btn = document.querySelector('.like-btn');
-            btn.style.transform = 'scale(1.5)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 200);
-        }
-
-        // Эффект клика
         function spawnEffect(e) {
             const effect = document.createElement('div');
             effect.className = 'click-effect';
