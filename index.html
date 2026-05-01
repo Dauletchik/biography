@@ -160,6 +160,30 @@
             color: #fff;
         }
 
+        /* ЛАЙКИ И ПРОСМОТРЫ */
+        .stats-footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .like-btn {
+            cursor: pointer;
+            transition: 0.3s;
+            color: #ff4757;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .like-btn:hover { transform: scale(1.2); }
+        .views-count { color: var(--accent); display: flex; align-items: center; gap: 5px; }
+
         /* КНОПКИ */
         .btn-container {
             display: grid;
@@ -232,6 +256,15 @@
                 <div class="info-row"><i class="fas fa-code"></i> <span class="label">Hobby:</span> <span class="value">иɜучᴀᴛь #ᴩᴀwn</span></div>
             </div>
 
+            <div class="stats-footer">
+                <div class="views-count">
+                    <i class="fas fa-eye"></i> <span id="v-count">0</span>
+                </div>
+                <div class="like-btn" onclick="addLike()">
+                    <i class="fas fa-heart"></i> <span id="l-count">0</span>
+                </div>
+            </div>
+
             <div class="btn-container">
                 <a href="https://t.me/HETY_HOMEP" class="btn"><i class="fab fa-telegram"></i> TG</a>
                 <a href="https://vk.com/dauletchik" class="btn"><i class="fab fa-vk"></i> VK</a>
@@ -240,8 +273,17 @@
     </div>
 
     <script>
-        // Скрипт прелоадера на 4 секунды
+        // Скрипт прелоадера и логики статистики
         window.addEventListener('load', () => {
+            // Санауыштарды жүктеу
+            let views = localStorage.getItem('daulet_views') || 0;
+            views++;
+            localStorage.setItem('daulet_views', views);
+            document.getElementById('v-count').innerText = views;
+
+            let likes = localStorage.getItem('daulet_likes') || 0;
+            document.getElementById('l-count').innerText = likes;
+
             setTimeout(() => {
                 const loader = document.getElementById('preloader');
                 const main = document.getElementById('main-content');
@@ -252,8 +294,20 @@
                     main.style.opacity = '1';
                     document.body.style.overflow = 'auto';
                 }, 1000);
-            }, 4000); // 4 секунды задержка
+            }, 4000); 
         });
+
+        function addLike() {
+            let likes = localStorage.getItem('daulet_likes') || 0;
+            likes++;
+            localStorage.setItem('daulet_likes', likes);
+            document.getElementById('l-count').innerText = likes;
+            
+            // Жүрек атылу эффектісі
+            const btn = document.querySelector('.like-btn');
+            btn.style.transform = 'scale(1.5)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 200);
+        }
 
         // Эффект клика
         function spawnEffect(e) {
