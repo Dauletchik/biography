@@ -3,338 +3,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAULET | OFFICIAL BIO</title>
+    <title>DAULET · эфемерный</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --accent: #00ffcc;
-            --bg-dark: #0a0a0a;
-            --glass: rgba(255, 255, 255, 0.05);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            background: var(--bg-dark);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
             height: 100%;
+            background: #0b0b0b;
+            color: #f0f0f0;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow: hidden;
+            user-select: none;
         }
 
-        /* ПРЕЛОАДЕР (АНИМАЦИЯ ВХОДА) */
+        /* ——— прелоадер ——— */
         #preloader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
+            inset: 0;
+            background: #0b0b0b;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1.4s cubic-bezier(0.23, 1, 0.32, 1);
+            pointer-events: none;
         }
 
-        .loader-text {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 1.5rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            animation: pulse 1.5s infinite alternate, glow 2s infinite;
-        }
-
-        @keyframes pulse {
-            from { opacity: 0.2; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1.1); }
-        }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px var(--accent); }
-            50% { text-shadow: 0 0 30px var(--accent), 0 0 50px var(--accent); }
-        }
-
-        .loader-bar {
-            width: 200px;
-            height: 2px;
-            background: rgba(255,255,255,0.1);
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loader-bar::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 100%;
-            background: var(--accent);
-            animation: load 4s forwards;
-        }
-
-        @keyframes load {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
-
-        /* ОСНОВНОЙ КОНТЕНТ */
-        #main-content {
+        #preloader.hide {
             opacity: 0;
-            transition: opacity 1.5s ease;
+        }
+
+        .preloader-ring {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 255, 200, 0.08);
+            border-top-color: #00ffcc;
+            animation: spin 1.2s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+            box-shadow: 0 0 30px rgba(0, 255, 200, 0.1);
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .preloader-text {
+            margin-top: 30px;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 6px;
+            color: #00ffcc;
+            opacity: 0.7;
+            animation: breathe 2.4s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+
+        /* ——— основной контейнер ——— */
+        #main {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            background: radial-gradient(circle at 30% 40%, #141414 0%, #050505 90%);
+            opacity: 0;
+            transition: opacity 1.8s ease;
+            padding: 16px;
         }
 
-        .bio-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            padding: 40px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            text-align: center;
+        #main.visible {
+            opacity: 1;
         }
 
-        .avatar-box {
+        /* ——— карточка ——— */
+        .card {
+            background: rgba(20, 20, 25, 0.55);
+            backdrop-filter: blur(22px) saturate(1.3);
+            -webkit-backdrop-filter: blur(22px) saturate(1.3);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 48px;
+            padding: 40px 32px 38px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 200, 0.03);
+            transition: transform 0.25s ease, box-shadow 0.4s ease;
             position: relative;
-            width: 120px;
-            height: 120px;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 70% 10%, rgba(0, 255, 200, 0.03), transparent 70%);
+            pointer-events: none;
+        }
+
+        /* ——— аватар ——— */
+        .avatar {
+            width: 110px;
+            height: 110px;
             margin: 0 auto 20px;
-        }
-
-        .avatar-box i {
-            font-size: 80px;
-            color: var(--accent);
-            filter: drop-shadow(0 0 15px var(--accent));
-        }
-
-        .info-grid {
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .info-row {
+            border-radius: 50%;
+            background: rgba(0, 255, 200, 0.03);
             display: flex;
             align-items: center;
-            padding: 12px;
-            margin: 8px 0;
-            background: rgba(255,255,255,0.03);
-            border-radius: 10px;
-            transition: 0.4s;
-            border-left: 3px solid transparent;
+            justify-content: center;
+            font-size: 56px;
+            color: #00ffcc;
+            border: 1px solid rgba(0, 255, 200, 0.08);
+            box-shadow: 0 0 50px rgba(0, 255, 200, 0.04);
+            transition: 0.3s;
         }
 
-        .info-row:hover {
-            background: rgba(0, 255, 204, 0.1);
-            border-left: 3px solid var(--accent);
-            transform: translateX(10px);
+        .avatar i {
+            filter: drop-shadow(0 0 12px rgba(0, 255, 200, 0.15));
         }
 
-        .info-row i {
-            margin-right: 15px;
-            color: var(--accent);
-            width: 25px;
-            text-align: center;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #888;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            margin-right: 10px;
-        }
-
-        .value {
+        /* ——— тайтл ——— */
+        .title {
             font-family: 'Syncopate', sans-serif;
-            font-size: 0.85rem;
+            font-size: 1.6rem;
+            letter-spacing: 4px;
             color: #fff;
+            margin-bottom: 4px;
         }
 
-        /* STATS BAR */
-        .stats-bar {
+        .sub {
+            color: rgba(255,255,255,0.25);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            font-weight: 300;
+        }
+
+        /* ——— сетка информации ——— */
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin: 18px 0 22px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.015);
+            border-radius: 18px;
+            border-left: 2px solid transparent;
+            transition: 0.25s ease;
+            cursor: default;
+        }
+
+        .info-item:hover {
+            background: rgba(0, 255, 200, 0.04);
+            border-left-color: #00ffcc;
+            transform: translateX(6px);
+        }
+
+        .info-item i {
+            width: 26px;
+            color: #00ffcc;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            transition: 0.2s;
+        }
+
+        .info-item:hover i {
+            opacity: 1;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            color: rgba(255,255,255,0.2);
+            margin-right: 12px;
+            text-transform: uppercase;
+            min-width: 62px;
+        }
+
+        .info-value {
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: #f0f0f0;
+            letter-spacing: 0.3px;
+        }
+
+        .info-value small {
+            color: rgba(255,255,255,0.25);
+            font-size: 0.7rem;
+            margin-left: 4px;
+        }
+
+        /* ——— статистика ——— */
+        .stats {
             display: flex;
             justify-content: space-around;
-            margin-top: 20px;
-            padding: 10px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+            padding: 10px 12px;
+            margin: 16px 0 24px;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .stat i {
+            color: #00ffcc;
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+
+        .stat span {
+            font-weight: 600;
+            color: #f0f0f0;
             font-size: 0.9rem;
         }
 
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .stat.like {
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .stat-item i { color: var(--accent); }
-        .like-active { color: #ff4757 !important; animation: pulse 0.5s ease; }
+        .stat.like:hover {
+            color: #fff;
+        }
 
-        /* КНОПКИ */
-        .btn-container {
+        .stat.like .fa-heart {
+            transition: 0.2s;
+        }
+
+        .stat.like .fa-heart.liked {
+            color: #ff3b6f;
+            opacity: 1;
+            animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+
+        /* ——— кнопки ——— */
+        .buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .shop-btn {
-            grid-column: span 2;
-            background: rgba(0, 255, 204, 0.1);
+            gap: 12px;
         }
 
         .btn {
-            padding: 15px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            font-size: 0.75rem;
+            padding: 14px 10px;
+            border-radius: 24px;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid var(--accent);
-            transition: 0.4s;
+            color: #f0f0f0;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: 0.25s ease;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             gap: 8px;
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn i {
+            color: #00ffcc;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: 0.2s;
         }
 
         .btn:hover {
-            background: var(--accent);
-            color: black;
-            box-shadow: 0 0 25px var(--accent);
+            background: rgba(0, 255, 200, 0.04);
+            border-color: rgba(0, 255, 200, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px -10px rgba(0, 255, 200, 0.05);
         }
 
-        /* ЭФФЕКТ ЧАСТИЦ */
-        .click-effect {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            border-radius: 50%;
+        .btn:hover i {
+            opacity: 1;
+        }
+
+        .btn.shop {
+            grid-column: span 2;
+            background: rgba(0, 255, 200, 0.02);
+            border-color: rgba(0, 255, 200, 0.06);
+        }
+
+        .btn.shop i {
+            color: #00ffcc;
+        }
+
+        /* ——— клик-эффект ——— */
+        .click-burst {
+            position: fixed;
             pointer-events: none;
-            animation: clickAnim 0.6s ease-out forwards;
+            border-radius: 50%;
+            background: radial-gradient(circle, #00ffcc 0%, rgba(0,255,200,0) 70%);
+            width: 12px;
+            height: 12px;
+            transform: translate(-50%, -50%);
+            animation: burst 0.8s ease-out forwards;
+            z-index: 999;
         }
 
-        @keyframes clickAnim {
-            to { transform: scale(5); opacity: 0; }
+        @keyframes burst {
+            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(6); }
+        }
+
+        /* ——— адаптив ——— */
+        @media (max-width: 500px) {
+            .card {
+                padding: 30px 18px 28px;
+                border-radius: 32px;
+            }
+            .title {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+            .info-item {
+                padding: 8px 12px;
+            }
+            .info-label {
+                min-width: 50px;
+                font-size: 0.6rem;
+            }
+            .info-value {
+                font-size: 0.75rem;
+            }
+            .stats {
+                padding: 8px 6px;
+                gap: 6px;
+            }
+            .stat {
+                font-size: 0.7rem;
+                gap: 6px;
+            }
+            .btn {
+                font-size: 0.6rem;
+                padding: 12px 8px;
+            }
         }
     </style>
 </head>
-<body onclick="spawnEffect(event)">
+<body>
 
+    <!-- ПРЕЛОАДЕР -->
     <div id="preloader">
-        <div class="loader-text">D A U L E T</div>
-        <div style="font-size: 0.8rem; margin-top: 10px; color: #555;">WELCOME TO BIOGRAPHY...</div>
-        <div class="loader-bar"></div>
+        <div class="preloader-ring"></div>
+        <div class="preloader-text">daulet</div>
     </div>
 
-    <div id="main-content">
-        <div class="bio-card">
-            <div class="avatar-box">
-                <i class="fas fa-ghost"></i>
+    <!-- ОСНОВНАЯ СТРАНИЦА -->
+    <div id="main">
+        <div class="card">
+
+            <!-- Аватар -->
+            <div class="avatar">
+                <i class="fas fa-crown"></i>
             </div>
 
+            <!-- Имя / подпись -->
+            <div class="title">DAULET</div>
+            <div class="sub">· эфемерный ·</div>
+
+            <!-- Информация (без лишнего текста) -->
             <div class="info-grid">
-                <div class="info-row"><i class="fas fa-signature"></i> <span class="label">Name:</span> <span class="value">Dᴀulᴇᴛ👤</span></div>
-                <div class="info-row"><i class="fas fa-user-friends"></i> <span class="label">Friends:</span> <span class="value">(ᴄᴋᴩыᴛᴏ)</span></div>
-                <div class="info-row"><i class="fas fa-id-badge"></i> <span class="label">Accounts:</span> <span class="value">@dauletbr, @HETY_HOMEP</span></div>
-                <div class="info-row"><i class="fas fa-project-diagram"></i> <span class="label">Projects:</span> <span class="value">soon</span></div>
-                <div class="info-row"><i class="fas fa-microphone-alt"></i> <span class="label">Studio:</span> <span class="value">Soon</span></div>
-                <div class="info-row"><i class="fas fa-terminal"></i> <span class="label">Def:</span> <span class="value">no</span></div>
-                <div class="info-row"><i class="fas fa-map-marker-alt"></i> <span class="label">Country:</span> <span class="value">Kᴀzᴀᴋhsᴛᴀn🇰🇿</span></div>
-                <div class="info-row"><i class="fas fa-code"></i> <span class="label">Hobby:</span> <span class="value">иɜучᴀᴛь #ᴩᴀwn</span></div>
+                <div class="info-item">
+                    <i class="fas fa-tag"></i>
+                    <span class="info-label">ник</span>
+                    <span class="info-value">Dᴀulᴇt <small>·</small></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-user-astronaut"></i>
+                    <span class="info-label">аккаунты</span>
+                    <span class="info-value">@dauletbr <small>·</small> @HETY_HOMEP</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-compass"></i>
+                    <span class="info-label">страна</span>
+                    <span class="info-value">Қазақстан 🇰🇿</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-cube"></i>
+                    <span class="info-label">проекты</span>
+                    <span class="info-value">soon <small>·</small> ∞</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-headphones-simple"></i>
+                    <span class="info-label">студия</span>
+                    <span class="info-value">Soon</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-code"></i>
+                    <span class="info-label">хобби</span>
+                    <span class="info-value">иɜучᴀᴛь #ᴩᴀwn</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-shield-halved"></i>
+                    <span class="info-label">статус</span>
+                    <span class="info-value">no</span>
+                </div>
             </div>
 
-            <div class="stats-bar">
-                <div class="stat-item">
+            <!-- СТАТИСТИКА (лайк / просмотры) -->
+            <div class="stats">
+                <div class="stat">
                     <i class="fas fa-eye"></i>
-                    <span id="view-count">...</span>
+                    <span id="viewCount">···</span>
                 </div>
-                <div class="stat-item" id="like-trigger" style="cursor: pointer;" onclick="handleLike()">
-                    <i class="fas fa-heart" id="like-icon"></i>
-                    <span id="like-count">...</span>
+                <div class="stat like" id="likeTrigger">
+                    <i class="fas fa-heart" id="likeIcon"></i>
+                    <span id="likeCount">···</span>
                 </div>
             </div>
 
-            <div class="btn-container">
-                <a href="https://t.me/HETY_HOMEP" class="btn"><i class="fab fa-telegram"></i> TG</a>
-                <a href="https://vk.com/dauletchik" class="btn"><i class="fab fa-vk"></i> VK</a>
-                <a href="https://dauletchik.github.io/shop" class="btn shop-btn"><i class="fas fa-shopping-cart"></i> MY SHOP</a>
+            <!-- Кнопки -->
+            <div class="buttons">
+                <a href="https://t.me/HETY_HOMEP" class="btn" target="_blank"><i class="fab fa-telegram"></i> telegram</a>
+                <a href="https://vk.com/dauletchik" class="btn" target="_blank"><i class="fab fa-vk"></i> vk</a>
+                <a href="https://dauletchik.github.io/shop" class="btn shop" target="_blank"><i class="fas fa-store"></i> мой шоп</a>
             </div>
+
         </div>
     </div>
 
     <script>
-        // API үшін уникалды кілт (сенің нигіңмен)
-        const userKey = "daulet_bio_official_stats";
+        (function() {
+            // ——— конфиг ———
+            const USER_KEY = 'daulet_bio_official_stats';
 
-        async function updateStats() {
-            try {
-                // Просмотрды алу және көбейту
-                const vRes = await fetch(`https://api.countapi.xyz/hit/${userKey}/views`);
-                const vData = await vRes.json();
-                document.getElementById('view-count').innerText = vData.value;
+            // ——— DOM ———
+            const preloader = document.getElementById('preloader');
+            const main = document.getElementById('main');
+            const viewSpan = document.getElementById('viewCount');
+            const likeSpan = document.getElementById('likeCount');
+            const likeIcon = document.getElementById('likeIcon');
+            const likeTrigger = document.getElementById('likeTrigger');
 
-                // Лайкты алу
-                const lRes = await fetch(`https://api.countapi.xyz/get/${userKey}/likes`);
-                const lData = await lRes.json();
-                document.getElementById('like-count').innerText = lData.value || 0;
-            } catch (e) {
-                document.getElementById('view-count').innerText = "1.2k";
-                document.getElementById('like-count').innerText = "438";
+            let likeLock = false;
+
+            // ——— асинхронное обновление статистики ———
+            async function fetchStats() {
+                try {
+                    // просмотры (hit)
+                    const vResp = await fetch(`https://api.countapi.xyz/hit/${USER_KEY}/views`);
+                    const vData = await vResp.json();
+                    viewSpan.textContent = vData.value;
+
+                    // лайки (get)
+                    const lResp = await fetch(`https://api.countapi.xyz/get/${USER_KEY}/likes`);
+                    const lData = await lResp.json();
+                    const likes = lData.value || 0;
+                    likeSpan.textContent = likes;
+
+                    // если уже лайкали — подсветить
+                    if (localStorage.getItem('daulet_liked') === 'true') {
+                        likeIcon.classList.add('liked');
+                    }
+                } catch (_) {
+                    // fallback
+                    viewSpan.textContent = '1.2k';
+                    likeSpan.textContent = '438';
+                }
             }
-        }
 
-        async function handleLike() {
-            if (localStorage.getItem('liked_daulet')) return;
+            // ——— обработчик лайка ———
+            async function handleLike(e) {
+                e.stopPropagation();
+                if (likeLock) return;
+                if (localStorage.getItem('daulet_liked') === 'true') return;
 
-            try {
-                const res = await fetch(`https://api.countapi.xyz/hit/${userKey}/likes`);
-                const data = await res.json();
-                document.getElementById('like-count').innerText = data.value;
-                document.getElementById('like-icon').classList.add('like-active');
-                localStorage.setItem('liked_daulet', 'true');
-            } catch (e) {}
-        }
-
-        window.addEventListener('load', () => {
-            updateStats();
-            if (localStorage.getItem('liked_daulet')) {
-                document.getElementById('like-icon').classList.add('like-active');
+                likeLock = true;
+                try {
+                    const res = await fetch(`https://api.countapi.xyz/hit/${USER_KEY}/likes`);
+                    const data = await res.json();
+                    likeSpan.textContent = data.value;
+                    likeIcon.classList.add('liked');
+                    localStorage.setItem('daulet_liked', 'true');
+                } catch (_) {
+                    // если ошибка — всё равно даём локальный +1
+                    const current = parseInt(likeSpan.textContent) || 0;
+                    likeSpan.textContent = current + 1;
+                    likeIcon.classList.add('liked');
+                    localStorage.setItem('daulet_liked', 'true');
+                }
+                likeLock = false;
             }
 
-            setTimeout(() => {
-                const loader = document.getElementById('preloader');
-                const main = document.getElementById('main-content');
-                loader.style.opacity = '0';
+            // ——— визуальный эффект клика (по всей странице) ———
+            function spawnBurst(e) {
+                const el = document.createElement('div');
+                el.className = 'click-burst';
+                el.style.left = e.clientX + 'px';
+                el.style.top = e.clientY + 'px';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 900);
+            }
+
+            // ——— запуск ———
+            window.addEventListener('load', () => {
+                // получаем статистику
+                fetchStats();
+
+                // скрываем прелоадер через 2.2с (или сразу после загрузки)
                 setTimeout(() => {
-                    loader.style.display = 'none';
-                    main.style.opacity = '1';
-                }, 1000);
-            }, 4000);
-        });
+                    preloader.classList.add('hide');
+                    main.classList.add('visible');
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 1500);
+                }, 1800);
 
-        function spawnEffect(e) {
-            const effect = document.createElement('div');
-            effect.className = 'click-effect';
-            effect.style.left = e.pageX - 5 + 'px';
-            effect.style.top = e.pageY - 5 + 'px';
-            document.body.appendChild(effect);
-            setTimeout(() => effect.remove(), 600);
-        }
+                // лайк по клику на блоке
+                likeTrigger.addEventListener('click', handleLike);
+
+                // эффект клика по всей странице
+                document.addEventListener('click', (e) => {
+                    spawnBurst(e);
+                });
+
+                // если лайк уже был — подсветка при загрузке
+                if (localStorage.getItem('daulet_liked') === 'true') {
+                    likeIcon.classList.add('liked');
+                }
+            });
+
+        })();
     </script>
 </body>
-</html>
-
+    </html>
